@@ -3,8 +3,10 @@
 #' Extract select items from gdxs.
 #'
 #' @param gdx_filepaths A vector of strings with the paths to all gdx files.
-#' @param gdx_items A list of lists, with "name" and "field" sublist-names of select
-#' gdx_items.
+#' @param gdx_items A list of lists, with "name" and "field" sublist-names of
+#'   select.
+#' @param remind_names If true, assume filepaths to remind output
+#'   folders/fulldata.gdx files gdx_items.
 #' @return A list of tibbles with the data for each gdx_item requested.
 #' @export
 #'
@@ -13,12 +15,16 @@
 #' @importFrom tidyr pivot_longer
 #' @importFrom tidyselect all_of
 #' @importFrom rlang :=
-read_items_from_gdxs <- function(gdx_filepaths, gdx_items) {
+read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = T) {
   # Declare return variable
   gdx_data <- NULL
 
-  # Get run names
-  run_names <- get_REMIND_run_names(gdx_filepaths)
+  # Get run (=file) names
+  if (remind_names) run_names <- get_REMIND_run_names(gdx_filepaths)
+  else run_names <- basename(gdx_filepaths)
+
+  # Whatever the case, check that the run_names are unqiue. If not, number them.
+  make.names(run_names, unique = T)
 
   # Loop over gdx_items
   for (gdx_item in gdx_items) {
@@ -45,7 +51,7 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items) {
         tmp_item_data <- tibble(ttot = "-", all_regi = "GLO", !!sym(run_name) := tmp_item_data)
       }
 
-      # Append the "tmp"_mif_data to MAgPIE object.
+      # Append the "tmp"_item_data to tibble object.
       if (gdx_file==gdx_filepaths[1]) {
         item_data <- tmp_item_data
       } else {
