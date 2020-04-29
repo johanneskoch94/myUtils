@@ -43,8 +43,6 @@ dir_with_timestamp <- function(path = ".",
   }
 
   if (any(duplicated(my_folders_wo_timeStamp))) {
-    cat("\nWARNING: There are folders with identical names (but different time stamps) at the given location. The most recent folders will be considered, however you may want to check this out!\n")
-
     # Get names of the duplicated folders.
     duplicated_folders <- my_folders_wo_timeStamp[duplicated(my_folders_wo_timeStamp)]
 

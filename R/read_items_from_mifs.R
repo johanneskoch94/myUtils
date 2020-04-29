@@ -20,6 +20,7 @@
 #' @importFrom quitte as.quitte
 #' @importFrom dplyr %>%
 #' @importFrom pbapply pblapply
+#' @importFrom parallel mclapply
 read_items_from_mifs <- function (mif_filepaths,
                                   regexs_of_items,
                                   returnAsMagpie = FALSE,

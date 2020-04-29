@@ -4,9 +4,9 @@
 #'
 #' @param gdx_filepaths A vector of strings with the paths to all gdx files.
 #' @param gdx_items A list of lists, with "name" and "field" sublist-names of
-#'   select.
+#'   select gdx_items.
 #' @param remind_names If true, assume filepaths to remind output
-#'   folders/fulldata.gdx files gdx_items.
+#'   folders/fulldata.gdx files.
 #' @return A list of tibbles with the data for each gdx_item requested.
 #' @export
 #'
