@@ -24,7 +24,7 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = T) {
   else run_names <- basename(gdx_filepaths)
 
   # Whatever the case, check that the run_names are unqiue. If not, number them.
-  make.names(run_names, unique = T)
+  run_names <- make.names(run_names, unique = T)
 
   # Loop over gdx_items
   for (gdx_item in gdx_items) {

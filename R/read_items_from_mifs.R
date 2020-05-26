@@ -31,10 +31,17 @@ read_items_from_mifs <- function (mif_filepaths,
   # Read and filter the mifs
   if (n_cores == 1) {
     my_data <- pblapply(mif_filepaths,
-                        function(y) read.report(y, as.list = FALSE) %>% `[`(,,grep(regex, getNames(.), value=T)))
+                        function(y){
+                          h1 <- read.report(y, as.list = FALSE)
+                          h2 <- h1[,,grep(regex, getNames(h1), value=T)]
+                          return(h2)
+                        })
   } else {
     my_data <- mclapply(mif_filepaths,
-                        function(y) read.report(y, as.list = FALSE) %>% `[`(,,grep(regex, getNames(.), value=T)),
+                        function(y){
+                          h1 <- read.report(y, as.list = FALSE)
+                          h2 <- h1[,,grep(regex, getNames(h1), value=T)]
+                        },
                         mc.cores = n_cores)
   }
 
