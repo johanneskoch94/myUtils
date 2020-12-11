@@ -20,8 +20,7 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = T) {
   gdx_data <- NULL
 
   # Get run (=file) names
-  if (remind_names) run_names <- get_REMIND_run_names(gdx_filepaths)
-  else run_names <- basename(gdx_filepaths)
+  run_names <- if (remind_names) get_REMIND_run_names(gdx_filepaths) else basename(gdx_filepaths)
 
   # Whatever the case, check that the run_names are unqiue. If not, number them.
   run_names <- make.names(run_names, unique = T)
@@ -71,6 +70,46 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = T) {
 
     cat(" done.\n")
   }
+
+  return(gdx_data)
+}
+
+
+#' read_items_from_gdxs2
+#'
+#' @param gdx_filepaths s
+#' @param gdx_items s
+#' @param remind_names s
+#'
+#' @return s
+#' @export
+#'
+#' @importFrom purrr map map_chr map_dfr
+#' @importFrom quitte read.gdx
+#' @importFrom dplyr %>% rename nest_by mutate pull
+#' @importFrom tidyr separate expand_grid
+#' @importFrom tidyselect last_col
+#' @importFrom rlang set_names
+read_items_from_gdxs2 <- function(gdx_filepaths, gdx_items, remind_names = T) {
+  # Add "field" entry if missing
+  gdx_items <- map(gdx_items, ~if( !"field" %in% names(.x) ) {c(.x, "field" = "l")} else {.x} )
+
+  # Get run (=file) names and make them unique
+  run_names <- if (remind_names) get_REMIND_run_names(gdx_filepaths) else basename(gdx_filepaths)
+  run_names <- make.names(run_names, unique = T)
+
+  # Get gdx data and combine into tibble if possible
+  gdx_data <- expand_grid(file = paste(gdx_filepaths,run_names),
+                          item = paste(map_chr(gdx_items,`$`,"name"), map_chr(gdx_items,`$`,"field"))) %>%
+    separate(file, c("file","name"), " ") %>%
+    separate(item, c("item","field"), " ") %>%
+    nest_by(item, field, .key = "gdxs") %>%
+    mutate(data = list(map(gdxs$file, quitte::read.gdx, item, field) %>%
+                         set_names(gdxs$name)) %>%
+             set_names(item)) %>%
+    pull(data) %>%
+    map(~if( sum(map_chr(.x[[1]], class) == "numeric")>1 ) {map_dfr(.x, ~..1, .id = "run") %>%
+        rename("value" = last_col())} else {.x})
 
   return(gdx_data)
 }
