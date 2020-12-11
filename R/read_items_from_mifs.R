@@ -18,7 +18,6 @@
 #'
 #' @importFrom magclass read.report getNames mbind
 #' @importFrom quitte as.quitte
-#' @importFrom dplyr %>%
 #' @importFrom pbapply pblapply
 #' @importFrom parallel mclapply
 read_items_from_mifs <- function (mif_filepaths,
@@ -26,31 +25,31 @@ read_items_from_mifs <- function (mif_filepaths,
                                   returnAsMagpie = FALSE,
                                   n_cores = 1) {
   # Collpase the regexs into a single regex
-  regex <- paste(regexs_of_items, collapse = "|")
+  regex <- paste0("(",paste(regexs_of_items, collapse = ")|("),")")
 
   # Read and filter the mifs
   if (n_cores == 1) {
-    my_data <- pblapply(mif_filepaths,
-                        function(y){
-                          h1 <- read.report(y, as.list = FALSE)
-                          h2 <- h1[,,grep(regex, getNames(h1), value=T)]
-                          return(h2)
-                        })
+    my_data <- pbapply::pblapply(mif_filepaths,
+                                 function(y){
+                                   h1 <- magclass::read.report(y, as.list = FALSE)
+                                   h2 <- h1[,,grep(regex, magclass::getNames(h1), value=T)]
+                                   return(h2)
+                                 })
   } else {
-    my_data <- mclapply(mif_filepaths,
-                        function(y){
-                          h1 <- read.report(y, as.list = FALSE)
-                          h2 <- h1[,,grep(regex, getNames(h1), value=T)]
-                        },
-                        mc.cores = n_cores)
+    my_data <- parallel::mclapply(mif_filepaths,
+                                  function(y){
+                                    h1 <- magclass::read.report(y, as.list = FALSE)
+                                    h2 <- h1[,,grep(regex, magclass::getNames(h1), value=T)]
+                                  },
+                                  mc.cores = n_cores)
   }
 
 
   # Depending on retrun type use mbind or as.quitte
   if (returnAsMagpie) {
-    my_data <- mbind(as.vector(my_data))
+    my_data <- magclass::mbind(as.vector(my_data))
   } else {
-    my_data <- lapply(my_data, as.quitte)
+    my_data <- lapply(my_data, quitte::as.quitte)
   }
 
   return(my_data)
