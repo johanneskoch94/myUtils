@@ -8,8 +8,7 @@
 #' @param remind_names If true, assume filepaths to remind output
 #'   folders/fulldata.gdx files.
 #'
-#' @return A list of lists, or if possible tibbles, with the data for each
-#'   gdx_item requested.
+#' @return A list of tibbles with the data for each gdx_item requested.
 #'
 #' @examples \dontrun{
 #' read_items_from_gdxs(gdx_filepaths = c("file1.gdx",
@@ -39,12 +38,16 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = T) {
     separate(.data$file, c("file","name"), " ") %>%
     separate(.data$item, c("item","field"), " ") %>%
     nest_by(.data$item, .data$field, .key = "gdxs") %>%
-    mutate(my_data = list(map(.data$gdxs$file, quitte::read.gdx, .data$item, .data$field) %>%
-                            set_names(.data$gdxs$name)) %>%
+    # Read in data
+    mutate(my_data = map(.data$gdxs$file, quitte::read.gdx, .data$item, .data$field) %>%
+             set_names(.data$gdxs$name) %>%
+             list() %>%
              set_names(.data$item)) %>%
     pull(.data$my_data) %>%
-    map(~if( sum(map_chr(.x[[1]], class) == "numeric")>1 ) {map_dfr(.x, ~..1, .id = "run") %>%
-        rename("value" = last_col())} else {.x})
+    map(~ map_dfr(.x, ~..1, .id = "run") %>% rename("value" = last_col()))
+    # CHECK the ">=" !!!!!!!!!!!!!!!!!!!!! TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!
+    # map(~if( sum(map_chr(.x[[1]], class) == "numeric")>=0 ) {map_dfr(.x, ~..1, .id = "run") %>%
+    #     rename("value" = last_col())} else {.x})
 
   return(gdx_data)
 }
