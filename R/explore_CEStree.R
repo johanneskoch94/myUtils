@@ -7,16 +7,6 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% mutate filter
-#' @importFrom tidyr pivot_wider pivot_longer
-#' @importFrom tidyselect all_of
-#' @importFrom shiny fluidPage titlePanel tabsetPanel tabPanel wellPanel
-#'   selectInput fluidRow plotOutput column renderPlot shinyApp downloadButton
-#'   downloadHandler
-#' @importFrom networkD3 sankeyNetworkOutput renderSankeyNetwork
-#' @importFrom ggplot2 ggplot geom_line geom_vline facet_wrap xlab ylab theme_bw
-#'   theme element_text aes margin ggsave
-#'
 explore_CEStree <- function(gdx_filepaths) {
 
   my_data <- read_items_from_gdxs(gdx_filepaths,
@@ -30,9 +20,9 @@ explore_CEStree <- function(gdx_filepaths) {
 
   # EDA
   my_data_pm <- my_data$pm_cesData %>%
-    pivot_wider(names_from = cesParameter) %>%
+    tidyr::pivot_wider(names_from = cesParameter) %>%
     mutate("eff*effgr"=eff*effgr, sigma=1/(1-rho)) %>%
-    pivot_longer(c(all_of(my_CESparams), "eff*effgr", sigma), names_to = "cesParameter")
+    tidyr::pivot_longer(c(tidyselect::all_of(my_CESparams), "eff*effgr", sigma), names_to = "cesParameter")
 
   # Drop down menus
   my_ins <- my_data_pm$all_in %>% levels()
@@ -86,7 +76,7 @@ explore_CEStree <- function(gdx_filepaths) {
                                                                   "Choose style",
                                                                   choices=my_styles,
                                                                   width = 200))),
-                                      sankeyNetworkOutput("plot3", height = "auto")))))
+                                      networkD3::sankeyNetworkOutput("plot3", height = "auto")))))
 
 
 
@@ -113,7 +103,7 @@ explore_CEStree <- function(gdx_filepaths) {
       session$clientData$output_plot1_width/2
     })
 
-    output$plot3 <- renderSankeyNetwork({
+    output$plot3 <- networkD3::renderSankeyNetwork({
       return(plot_sankey(my_data$cesOut2cesIn, my_data$vm_cesIO,
                          input$selectRun, input$selectCountry, input$selectPeriod, input$selectStyle))
     })
@@ -142,11 +132,6 @@ explore_CEStree <- function(gdx_filepaths) {
 #'
 #' @return A ggplot2 object.
 #'
-#' @importFrom dplyr %>% mutate filter
-#' @importFrom tidyr pivot_wider pivot_longer
-#' @importFrom tidyselect all_of
-#' @importFrom ggplot2 ggplot geom_line xlab ylab facet_wrap theme_bw theme
-#'   element_text aes margin
 plot_ces_parameters <- function(data,
                                 in_all_in,
                                 in_cesParameter,
@@ -154,9 +139,9 @@ plot_ces_parameters <- function(data,
   if (!is.null(run_names)) {
     my_params <- data$cesParameter %>% levels()
     plot_data <- data %>%
-      pivot_wider(names_from = cesParameter) %>%
+      tidyr::pivot_wider(names_from = cesParameter) %>%
       mutate("eff*effgr"=eff*effgr, sigma=1/(1-rho)) %>%
-      pivot_longer(c(all_of(my_params), "eff*effgr", sigma), names_to = "cesParameter")
+      tidyr::pivot_longer(c(tidyselect::all_of(my_params), "eff*effgr", sigma), names_to = "cesParameter")
   } else {
     plot_data <- data
   }
@@ -187,9 +172,6 @@ plot_ces_parameters <- function(data,
 #'
 #' @return A sankeyNetwork object
 #'
-#' @importFrom dplyr %>% tibble bind_rows distinct left_join filter select
-#'   mutate rowwise across arrange ungroup rename if_else
-#' @importFrom networkD3 sankeyNetwork
 plot_sankey <- function(cesOut2cesIn, cesIO, my_run, my_reg, my_period, style) {
 
   cesOut2cesIn <- cesOut2cesIn %>%

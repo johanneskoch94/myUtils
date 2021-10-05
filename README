@@ -1,0 +1,5 @@
+To update version in drat:
+1. Make sure you change the version number in the Description file
+2. Build source package
+3. Add to drat repo:  drat::insertPackage("../myUtils_0.0.0.9004.tar.gz", repodir = "../drat/", action="archive")
+5. Push drat repo

@@ -18,33 +18,33 @@
 #'
 #' @export
 #'
-#' @importFrom purrr map map_chr map_dfr
-#' @importFrom quitte read.gdx
-#' @importFrom dplyr %>% rename nest_by mutate pull
-#' @importFrom tidyr separate expand_grid
-#' @importFrom tidyselect last_col
-#' @importFrom rlang set_names .data
-read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = T) {
+read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = TRUE) {
   # Add "field" entry if missing
-  gdx_items <- map(gdx_items, ~if( !"field" %in% names(.x) ) {c(.x, "field" = "l")} else {.x} )
+  gdx_items <- purrr::map(gdx_items,
+                          ~ if(!"field" %in% names(.x)) c(.x, "field" = "l") else .x)
 
   # Get run (=file) names and make them unique
   run_names <- if (remind_names) get_REMIND_run_names(gdx_filepaths) else basename(gdx_filepaths)
   run_names <- make.names(run_names, unique = T)
 
+  possible_read_gdx <- purrr::possibly(quitte::read.gdx, otherwise = "Item does not exist in gdx.")
+
   # Get gdx data and combine into tibble if possible
-  gdx_data <- expand_grid(file = paste(gdx_filepaths,run_names),
-                          item = paste(map_chr(gdx_items,`$`,"name"), map_chr(gdx_items,`$`,"field"))) %>%
-    separate(.data$file, c("file","name"), " ") %>%
-    separate(.data$item, c("item","field"), " ") %>%
-    nest_by(.data$item, .data$field, .key = "gdxs") %>%
+  gdx_data <- tidyr::expand_grid(file = paste(gdx_filepaths,run_names),
+                                 item = paste(purrr::map_chr(gdx_items,`$`,"name"),
+                                              purrr::map_chr(gdx_items,`$`,"field"))) %>%
+    tidyr::separate(.data$file, c("file","name"), " ") %>%
+    tidyr::separate(.data$item, c("item","field"), " ") %>%
+    dplyr::nest_by(.data$item, .data$field, .key = "gdxs") %>%
     # Read in data
-    mutate(my_data = map(.data$gdxs$file, quitte::read.gdx, .data$item, .data$field) %>%
-             set_names(.data$gdxs$name) %>%
+    dplyr::mutate(my_data = purrr::map(.data$gdxs$file,
+                                       ~ possible_read_gdx(.x, .data$item, .data$field)) %>%
+             rlang::set_names(.data$gdxs$name) %>%
              list() %>%
-             set_names(.data$item)) %>%
-    pull(.data$my_data) %>%
-    map(~ map_dfr(.x, ~..1, .id = "run") %>% rename("value" = last_col()))
+             rlang::set_names(.data$item)) %>%
+    dplyr::pull(.data$my_data) %>%
+    purrr::map(~ purrr::map_dfr(.x, ~..1, .id = "run") %>%
+                 dplyr::rename("value" = tidyselect::last_col()))
     # CHECK the ">=" !!!!!!!!!!!!!!!!!!!!! TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!
     # map(~if( sum(map_chr(.x[[1]], class) == "numeric")>=0 ) {map_dfr(.x, ~..1, .id = "run") %>%
     #     rename("value" = last_col())} else {.x})

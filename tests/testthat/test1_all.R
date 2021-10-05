@@ -1,5 +1,4 @@
 context("Testing all functions")
-library(myUtils)
 
 test_string <- c("test1_2020-03-12_12.12.05",
                  "../data/test1_2020-03-12_12.12.05",
