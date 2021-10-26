@@ -1,0 +1,38 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# myUtils
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Bits and bobs to help analyze REMIND results
+
+## Installation
+
+Install the development version of myUtils from Github:
+
+``` {r eval=FALSE}
+remotes::install_github("johanneskoch94/myUtils")
+```
+
+## Example
+
+Use `explore_CEStree` to open a shiny app and compare CES parameters (pm_cesData) and final values of the production factors (vm_ces) of REMIND runs. 
+
+```{r eval=FALSE}
+library(myUtils)
+explore_CEStree(c("path1/fulldata.gdx", "path2/fulldata.gdx"))
+```
