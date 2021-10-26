@@ -125,7 +125,7 @@ explore_CEStree <- function(gdx_filepaths) {
 #' plot_ces_parameters does this and that
 #'
 #' @param data A tibble with the pm_cesData for REMIND runs. E.g. the result of
-#'   \code{\link[myUtils]{get_items_from_gdxs}}.
+#'   [read_items_from_gdxs()].
 #' @param in_all_in A string with the all_in parameter to be plotted.
 #' @param in_cesParameter A string with the cesParameter to be plotted.
 #' @param run_names A string of REMIND run names, or NULL.

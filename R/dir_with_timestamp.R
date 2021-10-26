@@ -1,6 +1,6 @@
 #' dir_with_timestamp
 #'
-#' dir_with_timestamp is a wrapper around \code{\link[base]{dir}}, with some
+#' dir_with_timestamp is a wrapper around [base::dir()], with some
 #' additional capabilities like filtering out folders with identical names but
 #' old timestamps.
 #'
@@ -9,11 +9,11 @@
 #' @param full.names Boolean, if true return full paths.
 #' @param name_timestamp_seperator A string with the name-timestamp seperator.
 #' @param timestamp_format A string with the timestamp format, as input for
-#'   \code{\link[base]{as.POSIXct}}.
+#'   [base::as.POSIXct()].
 #' @param remove_timestamp Boolean, if true remove timestamp.
 #' @param only_most_recent Boolean, if true remove folders with identical name
 #'   but older timestamps.
-#' @param ... Parameters that are passed on to \code{\link[base]{dir}}.
+#' @param ... Parameters that are passed on to [base::dir()].
 #'
 #' @export
 #'
