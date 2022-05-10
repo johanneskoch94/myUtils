@@ -16,7 +16,7 @@ explore_CEStree <- function(gdx_filepaths) {
 
 
   # Get names of CES parameters
-  my_CESparams <- my_data$pm_cesData$cesParameter %>% levels()
+  my_CESparams <- my_data$pm_cesData$cesParameter %>% unique()
 
   # EDA
   my_data_pm <- my_data$pm_cesData %>%
@@ -25,10 +25,10 @@ explore_CEStree <- function(gdx_filepaths) {
     tidyr::pivot_longer(c(tidyselect::all_of(my_CESparams), "eff*effgr", sigma), names_to = "cesParameter")
 
   # Drop down menus
-  my_ins <- my_data_pm$all_in %>% levels()
+  my_ins <- my_data_pm$all_in %>% unique()
   my_CESparams <- my_data_pm$cesParameter %>% unique()
   my_runs <- my_data$vm_cesIO$run %>% unique()
-  my_countries <- my_data$vm_cesIO$all_regi %>% levels()
+  my_countries <- my_data$vm_cesIO$all_regi %>% unique()
   my_periods <- my_data$vm_cesIO$tall %>% unique()
   my_styles <- c("stylized","values")
 
@@ -56,26 +56,26 @@ explore_CEStree <- function(gdx_filepaths) {
                                       plotOutput("plot2", height = "auto"),
                                       downloadButton("db2","Save plot"))),
                    tabPanel("sankey(in development)",
-                            wellPanel(fluidRow(column(4,
+                            wellPanel(fluidRow(column(3,
                                                       selectInput("selectRun",
                                                                   "Choose run",
                                                                   choices=my_runs,
                                                                   width = 200)),
-                                               column(4,
+                                               column(3,
                                                       selectInput("selectCountry",
                                                                   "Choose country",
                                                                   choices=my_countries,
-                                                                  width = 200)),
-                                               column(4,
+                                                                  width = 110)),
+                                               column(2,
                                                       selectInput("selectPeriod",
                                                                   "Choose year",
                                                                   choices=my_periods,
-                                                                  width = 200)),
-                                               column(4,
+                                                                  width = 100)),
+                                               column(2,
                                                       selectInput("selectStyle",
                                                                   "Choose style",
                                                                   choices=my_styles,
-                                                                  width = 200))),
+                                                                  width = 100))),
                                       networkD3::sankeyNetworkOutput("plot3", height = "auto")))))
 
 
@@ -186,6 +186,7 @@ plot_sankey <- function(cesOut2cesIn, cesIO, my_run, my_reg, my_period, style) {
     left_join(cesIO %>%
                 filter(run == my_run, all_regi == my_reg, tall == my_period) %>%
                 select(all_in.1 = all_in, value) %>%
+                # scale up everything except for capital!
                 mutate(value = if_else(all_in.1 == "kap",value,value*100))) %>%
     select("source"=all_in.1, "target"=all_in, value) %>%
     rowwise() %>%

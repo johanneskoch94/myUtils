@@ -45,9 +45,6 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = TRUE) 
     dplyr::pull(.data$my_data) %>%
     purrr::map(~ purrr::map_dfr(.x, ~..1, .id = "run") %>%
                  dplyr::rename("value" = tidyselect::last_col()))
-    # CHECK the ">=" !!!!!!!!!!!!!!!!!!!!! TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!
-    # map(~if( sum(map_chr(.x[[1]], class) == "numeric")>=0 ) {map_dfr(.x, ~..1, .id = "run") %>%
-    #     rename("value" = last_col())} else {.x})
 
-  return(gdx_data)
+  gdx_data
 }
