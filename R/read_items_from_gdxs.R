@@ -39,12 +39,11 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = TRUE) 
     # Read in data
     dplyr::mutate(my_data = purrr::map(.data$gdxs$file,
                                        ~ possible_read_gdx(.x, .data$item, .data$field)) %>%
-             rlang::set_names(.data$gdxs$name) %>%
-             list() %>%
-             rlang::set_names(.data$item)) %>%
+                    rlang::set_names(.data$gdxs$name) %>%
+                    list() %>%
+                    rlang::set_names(.data$item)) %>%
     dplyr::pull(.data$my_data) %>%
-    purrr::map(~ purrr::map_dfr(.x, ~..1, .id = "run") %>%
-                 dplyr::rename("value" = tidyselect::last_col()))
+    purrr::map(~ purrr::map_dfr(.x, ~..1, .id = "run"))
 
   gdx_data
 }
