@@ -1,11 +1,11 @@
 test_that("read_items_from_gdx works", {
-  gdx <- c("~/R_projects/msg_model/results/gdx_loadpoints/region_model/SSP2-Base_CAZ_msg.gdx")
+  gdx <- c("~/R_projects/msg_model/results/v1.0.0/1s_world_2022-07-13_13.33.15/msg.gdx")
   read_items_from_gdxs(gdx_filepaths = gdx,
                        gdx_items = list(list(name = "l", field = "l")),
-                       remind_names = FALSE)->x
+                       remind_names = FALSE)
 })
 
-read_items_from_gdxs("~/R_projects/msg_model/results/planner_e_ces_model/gdx_files/SSP2-Base_constant_cte_emission_msg.gdx",
+read_items_from_gdxs("~/R_projects/msg_model/results/v1.0.0/1s_world_2022-07-13_13.33.15/msg.gdx",
                      gdx_items = list(list(name = "l_sol", field = "l"),
                                       list(name = "e_sol_fe", field = "l"),
                                       list(name = "k_agg", field = "l"),
