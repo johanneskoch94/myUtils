@@ -1,7 +1,7 @@
 Package: myUtils
 Type: Package
 Title: Useful functions 
-Version: 0.0.0.9012
+Version: 0.0.0.9013
 Author: Johannes Koch
 Maintainer: Johannes Koch <jokoch@pik-potsdam.de>
 Description: Collection of useful functions to analyse and compare REMIND results.
@@ -14,6 +14,7 @@ Imports:
   dplyr,
   tidyr,
   tidyselect,
+  gdxrrw,
   ggplot2,
   purrr,
   rlang,
