@@ -2,7 +2,7 @@
 % Please edit documentation in R/explore_CEStree.R
 \name{explore_CEStree}
 \alias{explore_CEStree}
-\title{Explore the CES tree of a REMIND run}
+\title{Explore the CES tree of REMIND}
 \usage{
 explore_CEStree(gdx_filepaths)
 }
@@ -10,6 +10,5 @@ explore_CEStree(gdx_filepaths)
 \item{gdx_filepaths}{A vector of strings to REMIND gdx files}
 }
 \description{
-explore_CEStree opens a shiny app in which the ces parameters and values may
-be explored.
+Opens a shiny app in which the CES parameters and values may be explored.
 }

@@ -4,7 +4,7 @@
 \name{myUtils-package}
 \alias{myUtils-package}
 \alias{myUtils}
-\title{Collection of helpfull functions}
+\title{Collection of helpful functions}
 \description{
-Collection of helpfull functions
+Collection of helpful functions
 }

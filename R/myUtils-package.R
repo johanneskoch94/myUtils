@@ -1,6 +1,6 @@
-#' Collection of helpfull functions
+#' Collection of helpful functions
 #'
-#' Collection of helpfull functions
+#' Collection of helpful functions
 #'
 #' @name myUtils-package
 #' @aliases myUtils-package myUtils
