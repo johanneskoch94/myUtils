@@ -27,7 +27,7 @@ explore_CEStree <- function(gdx_filepaths) {
   my_runs <- my_data$vm_cesIO$run %>% unique()
   my_countries <- my_data$vm_cesIO$all_regi %>% unique()
   my_periods <- my_data$vm_cesIO$tall %>% unique()
-  my_styles <- c("stylized", "values")
+  my_styles <- c("stylized", "stylized_rev", "values", "values_rev")
 
   # Create shiny app
   ui <-fluidPage(titlePanel("CES Tree Explorer"),
@@ -57,7 +57,7 @@ explore_CEStree <- function(gdx_filepaths) {
                                                       selectInput("selectRun",
                                                                   "Choose run",
                                                                   choices = my_runs,
-                                                                  width = 200)),
+                                                                  width = 400)),
                                                column(3,
                                                       selectInput("selectCountry",
                                                                   "Choose country",
@@ -186,7 +186,8 @@ plot_sankey <- function(cesOut2cesIn, cesIO, my_run, my_reg, my_period, style) {
     arrange(source) %>%
     ungroup()
 
-  if (style == "stylized") l <- mutate(l, value = 1)
+  if (grepl("stylized", style)) l <- mutate(l, value = 1)
+  if (grepl("_rev", style)) l <- rename(l, "target" = source, "source" = target)
 
   networkD3::sankeyNetwork(Links = l,
                            Nodes = n,
