@@ -168,21 +168,21 @@ plot_ces_parameters <- function(data,
 #'
 plot_sankey <- function(cesOut2cesIn, cesIO, my_run, my_reg, my_period, style) {
 
-  cesOut2cesIn <- filter(cesOut2cesIn, .data$run == my_run)
-
-  n <- tibble(name = cesOut2cesIn$all_in) %>%
-    bind_rows(tibble(name = cesOut2cesIn$all_in.1)) %>%
-    distinct()
+  cesOut2cesIn <- cesOut2cesIn %>%
+    filter(.data$run == my_run) %>%
+    select(-"run") %>%
+    rename("target" = all_in, "source" = "all_in.1")
+  n <- tibble(name = unique(c(cesOut2cesIn$source, cesOut2cesIn$target)))
 
   l <- cesOut2cesIn %>%
     left_join(cesIO %>%
                 filter(.data$run == my_run, .data$all_regi == my_reg, .data$tall == my_period) %>%
-                select("all_in.1" = "all_in", "value") %>%
+                select("source" = "all_in", "value") %>%
                 # scale up everything except for capital!
-                mutate(value = if_else(.data$all_in.1 == "kap", .data$value, .data$value * 100))) %>%
-    select("source" = "all_in.1", "target" = "all_in", "value") %>%
+                mutate(value = if_else(.data$source == "kap", .data$value, .data$value * 100)),
+              by = join_by(source)) %>%
     rowwise() %>%
-    mutate(across(.cols = c(1,2), ~which(.x == n$name) - 1 %>% as.integer())) %>%
+    mutate(across(.cols = c(1, 2), ~which(.x == n$name) - 1 %>% as.integer())) %>%
     arrange(source) %>%
     ungroup()
 
