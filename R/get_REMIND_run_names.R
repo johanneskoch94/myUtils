@@ -13,10 +13,7 @@
 #' @export
 get_REMIND_run_names <- function(paths) {
   # Remove timestamps
-  names <- rm_timestamp(ifelse(dir.exists(paths),
-                               basename(paths),
-                               ifelse(dirname(paths)!=".",
-                                      basename(dirname(paths)),
-                                      paths)))
-  return(names)
+  rm_timestamp(ifelse(dir.exists(paths),
+                      basename(paths),
+                      ifelse(dirname(paths) != ".", basename(dirname(paths)), paths)))
 }

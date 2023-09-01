@@ -4,16 +4,12 @@
 \alias{rm_timestamp}
 \title{rm_timestamp}
 \usage{
-rm_timestamp(
-  strings,
-  name_timestamp_seperator = "_",
-  timestamp_format = "\%Y-\%m-\%d_\%H.\%M.\%S"
-)
+rm_timestamp(strings, sep = "_", timestamp_format = "\%Y-\%m-\%d_\%H.\%M.\%S")
 }
 \arguments{
 \item{strings}{A vector of stings.}
 
-\item{name_timestamp_seperator}{A string with the timestamp seperator.}
+\item{sep}{A string with the timestamp seperator.}
 
 \item{timestamp_format}{A string with the timestamp format, as input for
 as.POSIXct.}

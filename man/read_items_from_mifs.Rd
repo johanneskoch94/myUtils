@@ -4,12 +4,7 @@
 \alias{read_items_from_mifs}
 \title{read_items_from_mifs}
 \usage{
-read_items_from_mifs(
-  mif_filepaths,
-  regexs_of_items,
-  returnAsMagpie = FALSE,
-  n_cores = 1
-)
+read_items_from_mifs(mif_filepaths, regexs_of_items, returnAsMagpie = FALSE)
 }
 \arguments{
 \item{mif_filepaths}{A vector of strings containing the paths to the mif
@@ -18,14 +13,10 @@ files with the raw data.}
 \item{regexs_of_items}{A vector of regex patterns identifying the variables
 to extract from the mif files.}
 
-\item{returnAsMagpie}{Logical indicating return type. Either list of quitte
-objects, or magpie.}
-
-\item{n_cores}{Integer indicating the number of cores to be used in parallel}
+\item{returnAsMagpie}{If TRUE return magclass object}
 }
 \value{
-my_data Either a list of quitte objects (default) or a single magpie
-object,
+my_data Either a list of tibbles (default) or a single magpie object.
 }
 \description{
 read_items_from_mifs reads specific items from the remind reporting mif

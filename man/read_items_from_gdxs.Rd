@@ -9,11 +9,9 @@ read_items_from_gdxs(gdx_filepaths, gdx_items, remind_names = TRUE)
 \arguments{
 \item{gdx_filepaths}{A vector of strings with the paths to all gdx files.}
 
-\item{gdx_items}{A list of lists, with "name" and "field" sublist-names of
-select gdx_items.}
+\item{gdx_items}{A vector of strings}
 
-\item{remind_names}{If true, assume filepaths to remind output
-folders/fulldata.gdx files.}
+\item{remind_names}{If true, assume filepaths to remind output folders/fulldata.gdx files.}
 }
 \value{
 A list of tibbles with the data for each gdx_item requested.
@@ -23,9 +21,6 @@ Extract select items from gdxs.
 }
 \examples{
 \dontrun{
-read_items_from_gdxs(gdx_filepaths = c("file1.gdx",
-                                       "file2.gdx"),
-                     gdx_items = list(list(name = "item1", field = "l"),
-                                      list(name = "item2", field = "m")))}
-
+read_items_from_gdxs(gdx_filepaths = c("file1.gdx", "file2.gdx"),
+                     gdx_items = c("item1", "item2.l", "item3.m"))}
 }
