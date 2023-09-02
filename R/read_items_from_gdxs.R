@@ -3,7 +3,8 @@
 #' Extract select items from gdxs.
 #'
 #' @param gdx_filepaths A vector of strings with the paths to all gdx files.
-#' @param gdx_items A vector of strings
+#' @param gdx_items A vector of strings with the gdx items. The gams suffix notation can be used to specify the field.
+#'  (defaults to .l, i.e. level).
 #' @param remind_names If true, assume filepaths to remind output folders/fulldata.gdx files.
 #'
 #' @return A list of tibbles with the data for each gdx_item requested.
@@ -13,13 +14,14 @@
 #'                      gdx_items = c("item1", "item2.l", "item3.m"))}
 #' @export
 read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = TRUE) {
-  # Check access to gdxrrw and external gdx libraries
+
   rlang::check_installed("gamstransfer")
 
   # Check file paths
   if (!all(file.exists(gdx_filepaths))) {
     rlang::abort("Files do not exist.")
   }
+
   # Get run (=file) names and make them unique
   run_names <- if (remind_names) get_REMIND_run_names(gdx_filepaths) else basename(gdx_filepaths)
   run_names <- make.names(run_names, unique = TRUE)
@@ -28,12 +30,13 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = TRUE) 
   item_names <- sub("\\..*", "", gdx_items)
   names(item_names) <- item_names
 
+  # Load data
   l <- purrr::map(gdx_filepaths, function(file, name) {
     x <- gamstransfer::Container$new()
     x$read(file, item_names)
     purrr::map(item_names, ~tibble::as_tibble(x[.x]$records))
   })
-
+  # Restructure list by items
   x <- purrr::map(item_names, ~purrr::map_dfr(l, .x, .id = "run"))
 
   # Figure out which fields are requested, and thus which ones to drop from loaded data
@@ -45,7 +48,7 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = TRUE) 
   fields_2_drop <- purrr::map(item_fields, ~field_names[field_names != .x])
 
   x %>%
-    # Keep only colums of interest
+    # Keep only columns of interest
     purrr::map2(fields_2_drop, ~dplyr::select(.x, -tidyselect::all_of(.y[.y %in% colnames(.x)]))) %>%
     # Rename columns
     purrr::map(~dplyr::rename_with(.x, ~sub("_\\d$", "", .x))) %>%

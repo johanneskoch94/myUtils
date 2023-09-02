@@ -1,6 +1,6 @@
-#' Collection of helpful functions
+#' Load data from multiple gdx and mif files.
 #'
-#' Collection of helpful functions
+#' Load data from multiple gdx and mif files. Analyse and compare REMIND results.
 #'
 #' @name myUtils-package
 #' @aliases myUtils-package myUtils

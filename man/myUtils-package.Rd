@@ -4,7 +4,7 @@
 \name{myUtils-package}
 \alias{myUtils-package}
 \alias{myUtils}
-\title{Collection of helpful functions}
+\title{Load data from multiple gdx and mif files.}
 \description{
-Collection of helpful functions
+Load data from multiple gdx and mif files. Analyse and compare REMIND results.
 }

@@ -9,7 +9,8 @@ read_items_from_gdxs(gdx_filepaths, gdx_items, remind_names = TRUE)
 \arguments{
 \item{gdx_filepaths}{A vector of strings with the paths to all gdx files.}
 
-\item{gdx_items}{A vector of strings}
+\item{gdx_items}{A vector of strings with the gdx items. The gams suffix notation can be used to specify the field.
+(defaults to .l, i.e. level).}
 
 \item{remind_names}{If true, assume filepaths to remind output folders/fulldata.gdx files.}
 }
