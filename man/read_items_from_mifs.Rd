@@ -7,18 +7,15 @@
 read_items_from_mifs(mif_filepaths, regexs_of_items, returnAsMagpie = FALSE)
 }
 \arguments{
-\item{mif_filepaths}{A vector of strings containing the paths to the mif
-files with the raw data.}
+\item{mif_filepaths}{A vector of strings containing the file paths.}
 
-\item{regexs_of_items}{A vector of regex patterns identifying the variables
-to extract from the mif files.}
+\item{regexs_of_items}{A vector of regex patterns identifying the variables to extract.}
 
-\item{returnAsMagpie}{If TRUE return magclass object}
+\item{returnAsMagpie}{If TRUE return magclass object instead of a list of tibbles.}
 }
 \value{
-my_data Either a list of tibbles (default) or a single magpie object.
+A list of tibbles (default) or a single magpie object.
 }
 \description{
-read_items_from_mifs reads specific items from the remind reporting mif
-files.
+read_items_from_mifs reads specific items from the remind mif files.
 }

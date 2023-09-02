@@ -1,15 +1,12 @@
 #' read_items_from_mifs
 #'
-#' read_items_from_mifs reads specific items from the remind reporting mif
-#' files.
+#' read_items_from_mifs reads specific items from the remind mif files.
 #'
-#' @param mif_filepaths A vector of strings containing the paths to the mif
-#'   files with the raw data.
-#' @param regexs_of_items A vector of regex patterns identifying the variables
-#'   to extract from the mif files.
-#' @param returnAsMagpie If TRUE return magclass object
+#' @param mif_filepaths A vector of strings containing the file paths.
+#' @param regexs_of_items A vector of regex patterns identifying the variables to extract.
+#' @param returnAsMagpie If TRUE return magclass object instead of a list of tibbles.
 #'
-#' @return my_data Either a list of tibbles (default) or a single magpie object.
+#' @return A list of tibbles (default) or a single magpie object.
 #' @export
 read_items_from_mifs <- function (mif_filepaths, regexs_of_items, returnAsMagpie = FALSE) {
   # Collapse the regexs into a single regex
