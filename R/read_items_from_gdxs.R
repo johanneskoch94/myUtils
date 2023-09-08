@@ -39,6 +39,11 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = TRUE) 
   # Restructure list by items
   x <- purrr::map(item_names, ~purrr::map_dfr(l, .x, .id = "run"))
 
+  # Sets are returned with a _<DIGIT> suffix. Remove the suffix, but make sure names are unique.
+  numbered_sets <- purrr::map(x, ~colnames(.x)[grepl("_\\d$", colnames(.x))])
+  clean_sets <- purrr::map(numbered_sets, ~make.unique(sub("_\\d$", "", .x), sep = "_"))
+  sets_2_rename <- purrr::map2(numbered_sets, clean_sets, ~`names<-`(.x, .y))
+
   # Figure out which fields are requested, and thus which ones to drop from loaded data
   item_fields <- purrr::map2_chr(gdx_items, item_names, ~sub(.y, "", .x))
   item_fields <- sub("^$", ".l", item_fields)
@@ -49,10 +54,10 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = TRUE) 
 
   x %>%
     # Keep only columns of interest
-    purrr::map2(fields_2_drop, ~dplyr::select(.x, -tidyselect::all_of(.y[.y %in% colnames(.x)]))) %>%
+    purrr::map2(fields_2_drop, ~dplyr::select(.x, -tidyselect::any_of(.y))) %>%
     # Rename columns
-    purrr::map(~dplyr::rename_with(.x, ~sub("_\\d$", "", .x))) %>%
-    purrr::map(~dplyr::rename_with(.x, ~sub(paste(field_names, collapse = "|"), "value", .x))) %>%
+    purrr::map2(item_fields, ~dplyr::rename(.x, "value" = tidyselect::all_of(.y))) %>%
+    purrr::map2(sets_2_rename, ~dplyr::rename(.x, tidyselect::all_of(.y))) %>%
     # Convert factors to character
     purrr::map(~dplyr::mutate(.x, dplyr::across(tidyselect::where(is.factor), as.character)))
 }
