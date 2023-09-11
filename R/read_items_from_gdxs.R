@@ -44,19 +44,19 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = TRUE) 
   clean_sets <- purrr::map(numbered_sets, ~make.unique(sub("_\\d$", "", .x), sep = "_"))
   sets_2_rename <- purrr::map2(numbered_sets, clean_sets, ~`names<-`(.x, .y))
 
-  # Figure out which fields are requested, and thus which ones to drop from loaded data
+  # Figure out which fields are requested, and thus which ones to drop from loaded data (only applies to variables)
   item_fields <- purrr::map2_chr(gdx_items, item_names, ~sub(.y, "", .x))
   item_fields <- sub("^$", ".l", item_fields)
   field_names <- c(".l" = "level", ".m" = "marginal", ".lo" = "lower", ".up" = "upper", ".scale" = "scale")
   for (p in seq_along(field_names)) item_fields <- sub(names(field_names)[p], field_names[p], item_fields)
-  names(item_fields) <- item_names
   fields_2_drop <- purrr::map(item_fields, ~field_names[field_names != .x])
+  names(item_fields) <- rep("value", length(item_fields))
 
   x %>%
     # Keep only columns of interest
     purrr::map2(fields_2_drop, ~dplyr::select(.x, -tidyselect::any_of(.y))) %>%
     # Rename columns
-    purrr::map2(item_fields, ~dplyr::rename(.x, "value" = tidyselect::all_of(.y))) %>%
+    purrr::map(~dplyr::rename(.x, tidyselect::any_of(item_fields))) %>%
     purrr::map2(sets_2_rename, ~dplyr::rename(.x, tidyselect::all_of(.y))) %>%
     # Convert factors to character
     purrr::map(~dplyr::mutate(.x, dplyr::across(tidyselect::where(is.factor), as.character)))
