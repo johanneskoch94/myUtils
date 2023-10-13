@@ -8,16 +8,19 @@ explore_CEStree <- function(gdx_filepaths) {
 
   rlang::check_installed(c("shiny", "ggplot2", "networkD3"))
 
-  my_data <- read_items_from_gdxs(gdx_filepaths, c("pm_cesData", "vm_cesIO", "cesOut2cesIn"))
+  my_data <- read_items_from_gdxs(gdx_filepaths, c("pm_cesdata", "vm_cesIO", "cesOut2cesIn"))
 
   # Get names of CES parameters
-  my_CESparams <- my_data$pm_cesData$cesParameter %>% unique()
+  my_CESparams <- my_data$pm_cesdata$cesParameter %>% unique()
 
-  # EDA
-  my_data_pm <- my_data$pm_cesData %>%
+  # Add some custom parameters, like elasticity. Convert time dimension to numeric.
+  my_data_pm <- my_data$pm_cesdata %>%
     tidyr::pivot_wider(names_from = "cesParameter") %>%
-    dplyr::mutate("eff*effgr" = .data$eff * .data$effgr, sigma = 1 / (1 - .data$rho)) %>%
+    dplyr::mutate("eff*effgr" = .data$eff * .data$effgr,
+                  sigma = 1 / (1 - .data$rho),
+                  tall = as.numeric(.data$tall)) %>%
     tidyr::pivot_longer(c(tidyselect::all_of(my_CESparams), "eff*effgr", "sigma"), names_to = "cesParameter")
+  my_data$vm_cesIO <- dplyr::mutate(my_data$vm_cesIO, tall = as.numeric(.data$tall))
 
   # Drop down menus
   my_ins <- my_data_pm$all_in %>% unique()
@@ -31,7 +34,7 @@ explore_CEStree <- function(gdx_filepaths) {
   ui <- shiny::fluidPage(
     shiny::titlePanel("CES Tree Explorer"),
     shiny::tabsetPanel(
-      shiny::tabPanel("pm_cesData", shiny::wellPanel(shiny::fluidRow(
+      shiny::tabPanel("pm_cesdata", shiny::wellPanel(shiny::fluidRow(
         shiny::column(4, shiny::selectInput(
           "selectNode1", "Choose CES tree node", choices = my_ins, width = 200
         )),
@@ -94,18 +97,8 @@ explore_CEStree <- function(gdx_filepaths) {
   shiny::shinyApp(ui, server)
 }
 
-plot_ces_parameters <- function(data, in_all_in, in_cesParameter, run_names = NULL) {
-  if (!is.null(run_names)) {
-    my_params <- data$cesParameter %>% levels()
-    plot_data <- data %>%
-      tidyr::pivot_wider(names_from = "cesParameter") %>%
-      dplyr::mutate("eff*effgr" = .data$eff * .data$effgr, sigma = 1 / (1 - .data$rho)) %>%
-      tidyr::pivot_longer(c(tidyselect::all_of(my_params), "eff*effgr", "sigma"), names_to = "cesParameter")
-  } else {
-    plot_data <- data
-  }
-
-  ggplot2::ggplot(dplyr::filter(plot_data, .data$all_in == in_all_in, .data$cesParameter == in_cesParameter)) +
+plot_ces_parameters <- function(data, in_all_in, in_cesParameter) {
+  ggplot2::ggplot(dplyr::filter(data, .data$all_in == in_all_in, .data$cesParameter == in_cesParameter)) +
     ggplot2::geom_line(ggplot2::aes(x = .data$tall, y = .data$value, color = .data$run)) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(paste0(in_all_in, ",   ", in_cesParameter)) +
@@ -119,7 +112,7 @@ plot_sankey <- function(cesOut2cesIn, cesIO, my_run, my_reg, my_period, style) {
   cesOut2cesIn <- cesOut2cesIn %>%
     dplyr::filter(.data$run == my_run) %>%
     dplyr::select(-"run") %>%
-    dplyr::rename("target" = "all_in", "source" = "all_in.1")
+    dplyr::rename("target" = "all_in", "source" = "all_in_1")
   n <- tibble::tibble(name = unique(c(cesOut2cesIn$source, cesOut2cesIn$target)))
 
   l <- cesOut2cesIn %>%
@@ -137,8 +130,8 @@ plot_sankey <- function(cesOut2cesIn, cesIO, my_run, my_reg, my_period, style) {
   if (grepl("stylized", style)) l <- dplyr::mutate(l, value = 1)
   if (grepl("_rev", style)) l <- dplyr::rename(l, "target" = "source", "source" = "target")
 
-  networkD3::sankeyNetwork(Links = l,
-                           Nodes = n,
+  networkD3::sankeyNetwork(Links = as.data.frame(l),
+                           Nodes = as.data.frame(n),
                            Source = "source",
                            Target = "target",
                            Value = "value",

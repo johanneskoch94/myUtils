@@ -37,7 +37,7 @@ read_items_from_gdxs(c("path1/fulldata.gdx", "path2/fulldata.gdx"), c("var", "eq
 ```
 
 Use `explore_CEStree` to open a shiny app and compare CES parameters
-(pm_cesData) and final values of the production factors (vm_ces) of
+(pm_cesdata) and final values of the production factors (vm_ces) of
 REMIND runs.
 
 ``` r
