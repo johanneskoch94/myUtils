@@ -1,7 +1,7 @@
 Package: myUtils
 Type: Package
 Title: Load data from multiple gdx and mif files
-Version: 0.1.3
+Version: 0.2.0
 Author: Johannes Koch
 Maintainer: Johannes Koch <jokoch@pik-potsdam.de>
 Description: Load data from multiple gdx and mif files. Analyse and compare REMIND results.
@@ -11,7 +11,6 @@ Depends:
     R(>= 3.5.0)
 Imports:
   dplyr,
-  magclass,
   magrittr,
   purrr,
   rlang,
@@ -23,6 +22,7 @@ Suggests:
   gamstransfer,
   ggplot2,
   networkD3,
+  readr,
   shiny
 Roxygen: list(markdown = TRUE)
 URL: https://johanneskoch94.github.io/myUtils/

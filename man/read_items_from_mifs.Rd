@@ -4,17 +4,21 @@
 \alias{read_items_from_mifs}
 \title{read_items_from_mifs}
 \usage{
-read_items_from_mifs(mif_filepaths, regexs_of_items, returnAsMagpie = FALSE)
+read_items_from_mifs(
+  mif_filepaths,
+  regexs_of_items,
+  col_types = "cccccddddddddddddddddddd-"
+)
 }
 \arguments{
 \item{mif_filepaths}{A vector of strings containing the file paths.}
 
 \item{regexs_of_items}{A vector of regex patterns identifying the variables to extract.}
 
-\item{returnAsMagpie}{If TRUE return magclass object instead of a list of tibbles.}
+\item{col_types}{A string with the col_type specification for readr::read_delim}
 }
 \value{
-A list of tibbles (default) or a single magpie object.
+A tibble
 }
 \description{
 read_items_from_mifs reads specific items from the remind mif files.
