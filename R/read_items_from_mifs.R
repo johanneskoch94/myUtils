@@ -23,7 +23,7 @@ read_items_from_mifs <- function (mif_filepaths, regexs_of_items, col_types = "c
                       progress = FALSE,
                       lazy = TRUE) %>%
       dplyr::filter(grepl(regex, .data$Variable)) %>%
-      tidyr::pivot_longer(tidyselect::starts_with("2"),
+      tidyr::pivot_longer(tidyselect::starts_with(c("1", "2")),
                           names_to = "year",
                           names_transform = list("year" = as.integer)) %>%
       dplyr::rename_with(tolower)
