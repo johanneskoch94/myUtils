@@ -27,5 +27,6 @@ read_items_from_mifs <- function (mif_filepaths, regexs_of_items, col_types = "c
                           names_to = "year",
                           names_transform = list("year" = as.integer)) %>%
       dplyr::rename_with(tolower)
-  }) %>% purrr::list_rbind()
+  }) %>%
+    purrr::list_rbind()
 }

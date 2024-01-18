@@ -2,9 +2,19 @@
 % Please edit documentation in R/myUtils-package.R
 \docType{package}
 \name{myUtils-package}
-\alias{myUtils-package}
 \alias{myUtils}
-\title{Load data from multiple gdx and mif files.}
+\alias{myUtils-package}
+\title{myUtils: Load data from multiple gdx and mif files}
 \description{
 Load data from multiple gdx and mif files. Analyse and compare REMIND results.
+
+Load data from multiple gdx and mif files. Analyse and compare REMIND results.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://johanneskoch94.github.io/myUtils/}
+}
+
+}
+\keyword{internal}
