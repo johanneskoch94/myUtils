@@ -31,7 +31,7 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = TRUE) 
   names(item_names) <- item_names
 
   # Load data
-  l <- purrr::map(gdx_filepaths, function(file, name) {
+  l <- purrr::map(gdx_filepaths, function(file) {
     x <- gamstransfer::Container$new()
     x$read(file, item_names)
     purrr::map(item_names, ~tibble::as_tibble(x[.x]$records))
@@ -47,7 +47,7 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = TRUE) 
   # Figure out which fields are requested, and thus which ones to drop from loaded data (only applies to variables)
   item_fields <- purrr::map2_chr(gdx_items, item_names, ~sub(.y, "", .x))
   item_fields <- sub("^$", ".l", item_fields)
-  field_names <- c(".l" = "level", ".m" = "marginal", ".lo" = "lower", ".up" = "upper", ".scale" = "scale")
+  field_names <- c("^.l$" = "level", "^.m$" = "marginal", "^.lo$" = "lower", "^.up$" = "upper", "^.scale$" = "scale")
   for (p in seq_along(field_names)) item_fields <- sub(names(field_names)[p], field_names[p], item_fields)
   fields_2_drop <- purrr::map(item_fields, ~field_names[field_names != .x])
   names(item_fields) <- rep("value", length(item_fields))

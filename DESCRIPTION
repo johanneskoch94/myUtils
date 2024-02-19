@@ -1,7 +1,7 @@
 Package: myUtils
 Type: Package
 Title: Load data from multiple gdx and mif files
-Version: 0.2.2
+Version: 0.2.3
 Author: Johannes Koch
 Maintainer: Johannes Koch <jokoch@pik-potsdam.de>
 Description: Load data from multiple gdx and mif files. Analyse and compare REMIND results.
@@ -17,7 +17,7 @@ Imports:
   tibble,
   tidyr,
   tidyselect
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.1
 Suggests: 
   gamstransfer,
   ggplot2,
