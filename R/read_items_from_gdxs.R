@@ -21,6 +21,10 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = TRUE) 
   if (!all(file.exists(gdx_filepaths))) {
     rlang::abort("Files do not exist.")
   }
+  if (anyDuplicated(gdx_items)) {
+    rlang::warn("Duplicated items.")
+    gdx_items <- unique(gdx_items)
+  }
 
   # Get run (=file) names and make them unique
   run_names <- if (remind_names) get_REMIND_run_names(gdx_filepaths) else basename(gdx_filepaths)
