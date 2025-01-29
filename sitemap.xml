@@ -1,39 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://johanneskoch94.github.io/myUtils/404.html</loc>
-  </url>
-  <url>
-    <loc>https://johanneskoch94.github.io/myUtils/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://johanneskoch94.github.io/myUtils/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://johanneskoch94.github.io/myUtils/index.html</loc>
-  </url>
-  <url>
-    <loc>https://johanneskoch94.github.io/myUtils/reference/dir_with_timestamp.html</loc>
-  </url>
-  <url>
-    <loc>https://johanneskoch94.github.io/myUtils/reference/explore_CEStree.html</loc>
-  </url>
-  <url>
-    <loc>https://johanneskoch94.github.io/myUtils/reference/get_REMIND_run_names.html</loc>
-  </url>
-  <url>
-    <loc>https://johanneskoch94.github.io/myUtils/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://johanneskoch94.github.io/myUtils/reference/myUtils-package.html</loc>
-  </url>
-  <url>
-    <loc>https://johanneskoch94.github.io/myUtils/reference/read_items_from_gdxs.html</loc>
-  </url>
-  <url>
-    <loc>https://johanneskoch94.github.io/myUtils/reference/read_items_from_mifs.html</loc>
-  </url>
-  <url>
-    <loc>https://johanneskoch94.github.io/myUtils/reference/rm_timestamp.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://johanneskoch94.github.io/myUtils/404.html</loc></url>
+<url><loc>https://johanneskoch94.github.io/myUtils/LICENSE.html</loc></url>
+<url><loc>https://johanneskoch94.github.io/myUtils/authors.html</loc></url>
+<url><loc>https://johanneskoch94.github.io/myUtils/index.html</loc></url>
+<url><loc>https://johanneskoch94.github.io/myUtils/reference/dir_with_timestamp.html</loc></url>
+<url><loc>https://johanneskoch94.github.io/myUtils/reference/explore_CEStree.html</loc></url>
+<url><loc>https://johanneskoch94.github.io/myUtils/reference/get_REMIND_run_names.html</loc></url>
+<url><loc>https://johanneskoch94.github.io/myUtils/reference/index.html</loc></url>
+<url><loc>https://johanneskoch94.github.io/myUtils/reference/myUtils-package.html</loc></url>
+<url><loc>https://johanneskoch94.github.io/myUtils/reference/read_items_from_gdxs.html</loc></url>
+<url><loc>https://johanneskoch94.github.io/myUtils/reference/read_items_from_mifs.html</loc></url>
+<url><loc>https://johanneskoch94.github.io/myUtils/reference/rm_timestamp.html</loc></url>
 </urlset>
+
