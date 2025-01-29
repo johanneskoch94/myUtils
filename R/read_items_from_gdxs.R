@@ -38,7 +38,7 @@ read_items_from_gdxs <- function(gdx_filepaths, gdx_items, remind_names = TRUE) 
   l <- purrr::map(gdx_filepaths, function(file) {
     x <- gamstransfer::Container$new()
     x$read(file, item_names)
-    purrr::map(item_names, ~tibble::as_tibble(x[.x]$records))
+    purrr::map(item_names, ~tibble::as_tibble(x[.x]$records) %>% dplyr::mutate("description" = x[.x]$description))
   })
   # Restructure list by items
   x <- purrr::map(item_names, ~purrr::map_dfr(l, .x, .id = "run"))
